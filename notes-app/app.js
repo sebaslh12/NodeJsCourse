@@ -1,8 +1,8 @@
-// Node module system is built around the require function. require is a global variable provided by Node.js
-const fs = require('fs'); // To import Node.js core modules we pass the module name to the require function
+// We can require our own files, this makes the file to run alognside the current file.
+// If we just require a file that means it is not exporting anything, if the file exports something then that something has to be store in a variable
+const { name, add } = require('./utils');
+const getNotes = require('./notes');
+const msg = getNotes();
 
-fs.writeFileSync('notes.txt', 'My name is Sebastian.');
-
-// Challenge
-
-fs.appendFileSync('notes.txt', ` I'm appending this one`);
+console.log(add(4, -2), name);
+console.log(msg);
