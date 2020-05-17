@@ -3,7 +3,7 @@
 // Importing npm modules is like importing core modules, we pass the name of the package
 const chalk = require('chalk');
 const yargs = require('yargs');
-const getNotes = require('./notes');
+const notes = require('./notes');
 
 yargs.command({
 	command: 'add',
@@ -20,7 +20,7 @@ yargs.command({
 			type: 'string'
 		}
 	},
-	handler: (argv) => console.log(`Adding a new note ${argv.title}: ${argv.body}`)
+	handler: (argv) => notes.addNote(argv.title, argv.body)
 });
 
 yargs.command({
