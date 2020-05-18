@@ -5,12 +5,23 @@ const getNotes = () => 'Your notes...';
 
 const addNote = (title, body) => {
 	const notes = loadNotes();
-	const duplicates = notes.filter((note) => note.title === title);
-	if (!duplicates.length) {
+	const duplicateNote = notes.find((note) => note.title === title);
+
+	if (!duplicateNote) {
 		notes.push({ title, body });
 		saveNotes(notes);
 	} else {
 		console.log(chalk.bold.red.inverse('Note Already Exists!!'));
+	}
+}
+
+const readNote = (title) => {
+	const notes = loadNotes();
+	const note = notes.find((note) => note.title === title);
+	if (note) {
+		console.log(chalk.green.inverse(note.title), note.body);
+	} else {
+		console.log(chalk.bold.red.inverse('Note Not Found!!'));
 	}
 }
 
@@ -50,5 +61,6 @@ module.exports = {
 	getNotes,
 	addNote,
 	removeNote,
-	listNotes
+	listNotes,
+	readNote
 };
