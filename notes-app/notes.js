@@ -14,6 +14,12 @@ const addNote = (title, body) => {
 	}
 }
 
+const listNotes = () => {
+	const notes = loadNotes();
+	console.log(chalk.blueBright.inverse('Your Notes'));
+	notes.forEach(note => console.log(note.title));
+}
+
 const removeNote = (title) => {
 	const notes = loadNotes();
 	const notesToKeep = notes.filter((note) => note.title !== title);
@@ -43,5 +49,6 @@ const loadNotes = () => {
 module.exports = {
 	getNotes,
 	addNote,
-	removeNote
+	removeNote,
+	listNotes
 };
