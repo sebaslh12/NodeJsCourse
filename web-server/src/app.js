@@ -45,6 +45,23 @@ app.get('/weather', (req, res) => {
 	});
 });
 
+app.get('/help/*', (req, res) => {
+	res.render('about', {
+		title: 'Page not found',
+		errorMessage: 'Help Article Not found',
+		name: 'Sebastian'
+	});
+});
+
+// Wildcard route
+app.get('*', (req, res) => {
+	res.render('404', {
+		title: '404',
+		errorMessage: 'Page not found',
+		name: 'Sebastian'
+	});
+});
+
 app.listen(3000, () => {
 	console.log('Server is up on port 3000.');
 });
