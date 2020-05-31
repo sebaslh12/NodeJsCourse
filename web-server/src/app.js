@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
+const geocode = require('./utils/geocode');
+const forecast = require('./utils/forecast');
 
 const app = express();
 // The node main wrapper function provides __dirname and __filename values
@@ -44,10 +46,17 @@ app.get('/weather', (req, res) => {
 			error: 'You must provide an address'
 		});
 	}
-	res.send({
-		forecast: 'It is raining',
-		location: 'Colombia',
-		address: address
+	geocode(address, (error, geocodeData) => {
+		if (error) return res.send({ error });
+		const { latitude, longitude, location } = geocodeData;
+		forecast(latitude, longitude, (error, forecastData) => {
+			if (error) return res.send({ error });
+			res.send({
+				location,
+				forecast: forecastData,
+				address
+			})
+		});
 	});
 });
 
