@@ -38,10 +38,16 @@ app.get('/help', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
+	const address = req.query.address;
+	if (!address) {
+		return res.send({
+			error: 'You must provide an address'
+		});
+	}
 	res.send({
 		forecast: 'It is raining',
 		location: 'Colombia',
-		name: 'Sebastian'
+		address: address
 	});
 });
 
