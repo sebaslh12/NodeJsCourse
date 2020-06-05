@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const connectionURL = 'mongodb://127.0.0.1:27017/task-manager';
 
@@ -6,19 +7,39 @@ mongoose.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: tru
 
 const User = mongoose.model('User', {
 	name: {
-		type: String
-	}, age: {
-		type: Number
+		type: String,
+		trim: true,
+		require: true
 	},
+	age: {
+		type: Number,
+		default: 0,
+		validate(value) {
+			if (value < 0) {
+				throw new Error('Age must be a positive number')
+			}
+		}
+	},
+	email: {
+		type: String,
+		require: true,
+		trim: true,
+		lowercase: true,
+		validate(value) {
+			if (!validator.isEmail(value)) {
+				throw new Error('Email address is invalid');
+			}
+		}
+	}
 });
 
-/* const me = User({ name: 'Sebastian', age: 25 });
+const me = User({ name: 'Spaceee       ', email: '  a@a.com  ' });
 
 me.save().then(() => {
 	console.log(me)
 }).catch((error) => {
 	console.log('Error', error);
-}) */
+})
 
 const Task = mongoose.model('Task', {
 	description: {
@@ -29,10 +50,10 @@ const Task = mongoose.model('Task', {
 	}
 });
 
-const task = Task({ description: 'finish model', completed: true });
+/* const task = Task({ description: 'finish model', completed: true });
 
 task.save().then(() => {
 	console.log(task)
 }).catch((error) => {
 	console.log('Error', error);
-})
+}) */
