@@ -15,9 +15,14 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 		console.log(users);
 	}); */
 
-	db.collection('users').updateOne({ _id: ObjectID("5ed927683105522eaf816ecc") }, { $set: { name: 'Mike' } }).then((result) => {
+	/* db.collection('users').updateOne({ _id: ObjectID("5ed927683105522eaf816ecc") }, { $set: { name: 'Mike' } }).then((result) => {
 		console.log(result);
 	}).catch((error) => {
 		console.log(error);
-	})
+	}); */
+	db.collection('users').deleteMany({ age: 25 }).then((result) => {
+		console.log(result);
+	}).catch((error) => {
+		console.log(error);
+	});
 });
