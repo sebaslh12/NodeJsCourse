@@ -9,7 +9,7 @@ const User = mongoose.model('User', {
 	name: {
 		type: String,
 		trim: true,
-		require: true
+		required: true
 	},
 	age: {
 		type: Number,
@@ -20,9 +20,20 @@ const User = mongoose.model('User', {
 			}
 		}
 	},
+	password: {
+		type: String,
+		minlength: 7,
+		trim: true,
+		required: true,
+		validate(value) {
+			if (value.toLowerCase().includes('password')) {
+				throw new Error('Invalid password');
+			}
+		}
+	},
 	email: {
 		type: String,
-		require: true,
+		required: true,
 		trim: true,
 		lowercase: true,
 		validate(value) {
@@ -33,27 +44,30 @@ const User = mongoose.model('User', {
 	}
 });
 
-const me = User({ name: 'Spaceee       ', email: '  a@a.com  ' });
+/* const me = User({ name: 'Nameeee ', email: '  a@a.com  ', password:'123456   ' });
 
 me.save().then(() => {
 	console.log(me)
 }).catch((error) => {
 	console.log('Error', error);
-})
+}) */
 
 const Task = mongoose.model('Task', {
 	description: {
-		type: String
+		type: String,
+		required: true,
+		trim: true
 	},
 	completed: {
+		default: false,
 		type: Boolean
 	}
 });
 
-/* const task = Task({ description: 'finish model', completed: true });
+const task = Task({ description: 'Not passing completed' });
 
 task.save().then(() => {
 	console.log(task)
 }).catch((error) => {
 	console.log('Error', error);
-}) */
+})
