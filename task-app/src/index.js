@@ -40,6 +40,18 @@ app.get('/users/:id', async (req, res) => {
 	}
 });
 
+app.patch('/users/:id', async (req, res) => {
+	const _id = req.params.id;
+	try {
+		const user = await User.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true });
+		if (!user) return res.status(404).send();
+		res.send(user);
+	} catch (e) {
+		if (e.name === 'CastError') return res.status(400).send({ reason: 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters.' });
+		res.status(500).send(e);
+	}
+});
+
 app.post('/tasks', async (req, res) => {
 	const task = new Task(req.body);
 	try {
