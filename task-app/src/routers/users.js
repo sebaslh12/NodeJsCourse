@@ -36,8 +36,12 @@ router.get('/users/:id', async (req, res) => {
 
 router.patch('/users/:id', async (req, res) => {
 	const _id = req.params.id;
+	const updates = Object.keys(req.body);
 	try {
-		const user = await User.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true });
+		// findByIdAndUpdate bypasses mongoose, which means that the mongoose middlewares wont be triggered
+		const user = await User.findById(_id);
+		updates.forEach((update) => user[update] = req.body[update]);
+		await user.save();
 		if (!user) return res.status(404).send();
 		res.send(user);
 	} catch (e) {
