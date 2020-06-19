@@ -59,6 +59,16 @@ userSchema.static('findByCredentials', async (email, password) => {
 	return user;
 });
 
+userSchema.method('toJSON', function () {
+	const user = this;
+	const userObject = user.toObject();
+
+	delete userObject.password;
+	delete userObject.tokens;
+
+	return userObject;
+});
+
 userSchema.method('generateAuthToken', async function () {
 	const user = this;
 	const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse');
