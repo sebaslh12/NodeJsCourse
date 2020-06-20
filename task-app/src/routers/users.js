@@ -52,40 +52,23 @@ router.get('/users/me', auth, async (req, res) => {
 	}
 });
 
-router.get('/users/:id', async (req, res) => {
-	const _id = req.params.id;
-	try {
-		const user = await User.findById(_id);
-		if (!user) return res.status(404).send();
-		res.send(user);
-	} catch (e) {
-		if (e.name === 'CastError') return res.status(400).send({ reason: 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters.' });
-		res.status(500).send(e);
-	}
-});
-
-router.patch('/users/:id', async (req, res) => {
-	const _id = req.params.id;
+router.patch('/users/me', auth, async (req, res) => {
 	const updates = Object.keys(req.body);
 	try {
 		// findByIdAndUpdate bypasses mongoose, which means that the mongoose middlewares wont be triggered
-		const user = await User.findById(_id);
-		updates.forEach((update) => user[update] = req.body[update]);
-		await user.save();
-		if (!user) return res.status(404).send();
-		res.send(user);
+		updates.forEach((update) => req.user[update] = req.body[update]);
+		await req.user.save();
+		res.send(req.user);
 	} catch (e) {
 		if (e.name === 'CastError') return res.status(400).send({ reason: 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters.' });
 		res.status(500).send(e);
 	}
 });
 
-router.delete('/users/:id', async (req, res) => {
-	const _id = req.params.id;
+router.delete('/users/me', auth, async (req, res) => {
 	try {
-		const user = await User.findByIdAndDelete(_id);
-		if (!user) return res.status(404).send();
-		res.send(user);
+		await req.user.remove();
+		res.send(req.user);
 	} catch (e) {
 		if (e.name === 'CastError') return res.status(400).send({ reason: 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters.' });
 		res.status(500).send(e);
