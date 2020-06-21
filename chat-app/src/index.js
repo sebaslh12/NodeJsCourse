@@ -18,12 +18,14 @@ io.on('connection', (socket) => {
 	socket.emit('message', 'Welcome');
 	socket.broadcast.emit('message', 'New foe has appeared!'); // Broadcast to everybody but the one who send the socket
 
-	socket.on('sendMessage', (message) => {
+	socket.on('sendMessage', (message, callback) => {
 		io.emit('message', message); // Broadcast to everyone connected
+		callback();
 	});
 
-	socket.on('sendLocation', (location) => {
+	socket.on('sendLocation', (location, callback) => {
 		io.emit('message', `https://google.com/maps?q=${location.latitude},${location.longitude}`)
+		callback()
 	})
 
 	socket.on('disconnect', () => {
