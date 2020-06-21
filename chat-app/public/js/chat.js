@@ -12,4 +12,13 @@ document.querySelector('#chat').addEventListener('submit', (event) => {
 		socket.emit('sendMessage', message);
 		event.target.message.value = '';
 	}
-})
+});
+
+document.querySelector('#send-location').addEventListener('click', (event) => {
+	event.preventDefault();
+	if (!navigator.geolocation) return alert('Your browser does not support Geolocation');
+
+	navigator.geolocation.getCurrentPosition((position) => {
+		socket.emit('sendLocation', { latitude: position.coords.latitude, longitude: position.coords.longitude });
+	});
+});

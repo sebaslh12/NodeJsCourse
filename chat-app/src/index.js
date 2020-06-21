@@ -14,7 +14,6 @@ const publicDirectory = path.join(__dirname, '../public');
 app.use(express.static(publicDirectory));
 
 io.on('connection', (socket) => {
-	console.log('Welcome');
 
 	socket.emit('message', 'Welcome');
 	socket.broadcast.emit('message', 'New foe has appeared!'); // Broadcast to everybody but the one who send the socket
@@ -23,9 +22,13 @@ io.on('connection', (socket) => {
 		io.emit('message', message); // Broadcast to everyone connected
 	});
 
+	socket.on('sendLocation', (location) => {
+		io.emit('message', `https://google.com/maps?q=${location.latitude},${location.longitude}`)
+	})
+
 	socket.on('disconnect', () => {
 		io.emit('message', 'A foe has withdrawn!')
-	})
+	});
 })
 
 server.listen(port, () => {
