@@ -1,11 +1,15 @@
 const url = 'http://localhost:3000';
 const socket = io(url);
 
-socket.on('countUpdated', (data) => {
-	console.log('io count is ', data)
+socket.on('message', (message) => {
+	console.log(message);
 });
 
-document.querySelector('#increment').addEventListener('click', (event) => {
+document.querySelector('#chat').addEventListener('submit', (event) => {
 	event.preventDefault();
-	socket.emit('incrementCount')
+	const message = event.target.message.value.trim();
+	if (message) {
+		socket.emit('sendMessage', message);
+		event.target.message.value = '';
+	}
 })

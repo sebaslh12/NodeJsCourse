@@ -17,10 +17,9 @@ let count = 0;
 
 io.on('connection', (socket) => {
 	console.log('New foe has appeared');
-	socket.emit('countUpdated', count);
-	socket.on('incrementCount', () => {
-		count++;
-		io.emit('countUpdated', count); // this broadcasts the event to all the connections
+	socket.emit('message', 'Welcome');
+	socket.on('sendMessage', (message) => {
+		io.emit('message', message);
 	})
 })
 
