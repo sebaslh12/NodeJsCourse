@@ -13,13 +13,18 @@ const publicDirectory = path.join(__dirname, '../public');
 
 app.use(express.static(publicDirectory));
 
-let count = 0;
-
 io.on('connection', (socket) => {
-	console.log('New foe has appeared');
+	console.log('Welcome');
+
 	socket.emit('message', 'Welcome');
+	socket.broadcast.emit('message', 'New foe has appeared!'); // Broadcast to everybody but the one who send the socket
+
 	socket.on('sendMessage', (message) => {
-		io.emit('message', message);
+		io.emit('message', message); // Broadcast to everyone connected
+	});
+
+	socket.on('disconnect', () => {
+		io.emit('message', 'A foe has withdrawn!')
 	})
 })
 
