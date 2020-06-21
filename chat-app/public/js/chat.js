@@ -7,12 +7,17 @@ const locationButton = document.querySelector('#send-location');
 const messages = document.querySelector('#messages');
 // Template
 const messageTemplate = document.querySelector('#message-template').innerHTML;
+const locationTemplate = document.querySelector('#location-template').innerHTML;
 
 socket.on('message', (message) => {
 	const html = Mustache.render(messageTemplate,  { message })
 	messages.insertAdjacentHTML('afterbegin', html)
 });
 
+socket.on('locationMessage', (url) => {
+	const html = Mustache.render(locationTemplate, { url });
+	messages.insertAdjacentHTML('afterbegin', html)
+});
 
 form.addEventListener('submit', (event) => {
 	event.preventDefault();
