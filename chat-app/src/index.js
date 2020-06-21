@@ -13,8 +13,15 @@ const publicDirectory = path.join(__dirname, '../public');
 
 app.use(express.static(publicDirectory));
 
-io.on('connection', () => {
-	console.log('New foe has appeared')
+let count = 0;
+
+io.on('connection', (socket) => {
+	console.log('New foe has appeared');
+	socket.emit('countUpdated', count);
+	socket.on('incrementCount', () => {
+		count++;
+		io.emit('countUpdated', count); // this broadcasts the event to all the connections
+	})
 })
 
 server.listen(port, () => {
